@@ -1,15 +1,21 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { FOUNDING_PARTNERS, OFFICE_CONTACT } from '../data/legalData';
-import { Award, GraduationCap, Scale, MessageCircle, Quote } from 'lucide-react';
+import { Award, GraduationCap, MessageCircle, Quote } from 'lucide-react';
 
 export const FoundersSection: React.FC = () => {
   return (
     <section id="socios" className="py-20 bg-[#19100C] relative border-b border-[#D4AF37]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#261A15] border border-[#D4AF37]/30 text-xs font-semibold uppercase tracking-widest text-[#D4AF37] mb-3">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-2xl mx-auto mb-16"
+        >
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-[#261A15] border border-[#D4AF37]/30 text-xs font-semibold uppercase tracking-widest text-[#D4AF37] mb-3">
             <Award className="w-3.5 h-3.5" />
             <span>Corpo Jurídico e Liderança</span>
           </div>
@@ -19,17 +25,22 @@ export const FoundersSection: React.FC = () => {
           <p className="text-sm sm:text-base text-[#BDB5AD] mt-3 leading-relaxed">
             Advogados especialistas com sólida formação acadêmica, atuação nos tribunais estaduais e superiores e compromisso ético inegociável.
           </p>
-        </div>
+        </motion.div>
 
         {/* Partners Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
           {FOUNDING_PARTNERS.map((partner, idx) => (
-            <div
+            <motion.div
               key={idx}
-              className="p-6 sm:p-8 rounded-sm bg-[#221612] border border-[#D4AF37]/30 shadow-xl flex flex-col justify-between relative group hover:border-[#D4AF37] transition-all"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.45, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -4, borderColor: '#D4AF37' }}
+              className="p-6 sm:p-8 rounded-sm bg-[#221612] border border-[#D4AF37]/30 shadow-xl flex flex-col justify-between relative group transition-colors"
             >
               {/* Gold Top Marker */}
-              <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/50 to-transparent"></div>
+              <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/50 to-transparent" />
 
               <div>
                 {/* Header with Name and OAB badge */}
@@ -80,20 +91,20 @@ export const FoundersSection: React.FC = () => {
                 <span className="text-[11px] text-[#A69E96]">
                   Atendimento direto e análise prévia
                 </span>
-                <a
+                <motion.a
+                  whileHover={{ x: 2 }}
                   href={`https://wa.me/${OFFICE_CONTACT.whatsappClean}?text=${encodeURIComponent(`Olá! Gostaria de uma consulta com o ${partner.name}.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#D4AF37] hover:text-[#FFFFFF] transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#D4AF37] hover:text-[#FFFFFF] transition-colors cursor-pointer"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
                   <span>Falar com {partner.name.split(' ')[1]}</span>
-                </a>
+                </motion.a>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-
       </div>
     </section>
   );
