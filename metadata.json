@@ -1,0 +1,6 @@
+{
+  "name": "Drigo e Carneiro Advocacia",
+  "description": "Landing page institucional de alto padrão para o escritório Drigo e Carneiro Advocacia, com atendimento trabalhista, cível, família e empresarial.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

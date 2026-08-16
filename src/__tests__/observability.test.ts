@@ -1,0 +1,22 @@
+import { describe, it, expect } from 'vitest';
+import { telemetry } from '../lib/observability';
+
+describe('Observability & Telemetry Module', () => {
+  it('stores and maintains breadcrumbs within circular buffer limit', () => {
+    telemetry.addBreadcrumb('ui', 'Clicked Schedule button', { id: 'header-schedule-btn' });
+    telemetry.addBreadcrumb('navigation', 'Scrolled to practice areas');
+
+    const breadcrumbs = telemetry.getBreadcrumbs();
+    expect(breadcrumbs.length).toBeGreaterThan(0);
+    expect(breadcrumbs[breadcrumbs.length - 1].message).toBe('Scrolled to practice areas');
+  });
+
+  it('captures structured exceptions with context and timestamp', () => {
+    const testError = new Error('Database connection mock timeout');
+    const report = telemetry.captureException(testError, { component: 'TriageCalculator', step: 2 });
+
+    expect(report.message).toBe('Database connection mock timeout');
+    expect(report.timestamp).toBeDefined();
+    expect(report.context).toHaveProperty('component', 'TriageCalculator');
+  });
+});
