@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { OFFICE_CONTACT, PRACTICE_AREAS } from '../data/legalData';
-import { X, MessageCircle, ShieldCheck, CheckCircle2, Loader2 } from 'lucide-react';
+import { X, MessageCircle, ShieldCheck, CheckCircle2, Loader2, FileCheck2, Lock, Sparkles } from 'lucide-react';
 import { LogoMonogram } from './LogoMonogram';
+import { createExecutiveDossier, GeneratedDossier } from '../lib/dossier';
 
 interface ConsultationModalProps {
   isOpen: boolean;
@@ -22,27 +23,29 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
   const [preferredDate, setPreferredDate] = useState('');
   const [briefSummary, setBriefSummary] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [lastDossier, setLastDossier] = useState<GeneratedDossier | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
 
-    const message = `*Solicitação de Agendamento de Triagem*\n\n` +
-      `*Nome:* ${name}\n` +
-      `*Telefone:* ${phone}\n` +
-      `*Área:* ${area}\n` +
-      `*Formato Desejado:* ${preferredFormat}\n` +
-      `*Data/Horário Preferencial:* ${preferredDate || 'A combinar'}\n` +
-      `*Resumo Prévio:* ${briefSummary || 'Não informado'}\n\n` +
-      `Gostaria de confirmar a disponibilidade para a consulta.`;
+    const dossier = createExecutiveDossier({
+      clientName: name,
+      phone,
+      area,
+      preferredChannel: preferredFormat,
+      preferredTime: preferredDate,
+      situationSummary: briefSummary || 'Solicitação de agendamento de triagem executiva via formulário.',
+      source: 'modal_agendamento',
+    });
 
-    const whatsappUrl = `https://wa.me/${OFFICE_CONTACT.whatsappClean}?text=${encodeURIComponent(message)}`;
+    setLastDossier(dossier);
     
     setTimeout(() => {
-      window.open(whatsappUrl, '_blank');
+      window.open(dossier.whatsappUrl, '_blank');
       onClose();
       setSubmitted(false);
-    }, 900);
+    }, 950);
   };
 
   return (
@@ -90,11 +93,14 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-[#D4AF37] block">
+                    {lastDossier?.protocol ? `Protocolo Exclusivo: ${lastDossier.protocol}` : 'Dossiê Pré-Análise DC #2026'}
+                  </span>
                   <h4 className="text-base font-cinzel font-bold text-[#FFFFFF]">
-                    Redirecionando para o WhatsApp...
+                    Dossiê Gerado com Sucesso
                   </h4>
-                  <p className="text-xs text-[#C5BDB7]">
-                    Sua solicitação foi preparada e você falará diretamente com nossa equipe.
+                  <p className="text-xs text-[#C5BDB7] max-w-sm mx-auto">
+                    Encaminhando com prioridade para o plantão dos sócios no WhatsApp sob sigilo profissional.
                   </p>
                 </div>
                 <Loader2 className="w-4 h-4 text-[#D4AF37] animate-spin mx-auto mt-2" />

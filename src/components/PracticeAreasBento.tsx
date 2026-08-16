@@ -67,20 +67,20 @@ export const PracticeAreasBento: React.FC<PracticeAreasBentoProps> = ({ onOpenCo
     switch (urgency) {
       case 'alta':
         return (
-          <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-red-950/70 text-red-300 border border-red-800/40">
+          <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-sm bg-[#2A1512] text-[#E07A5F] border border-[#E07A5F]/30">
             <AlertCircle className="w-3 h-3" />
-            Urgência / Liminares
+            Liminares / Urgência
           </span>
         );
       case 'moderada':
         return (
-          <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-amber-950/70 text-amber-300 border border-amber-800/40">
+          <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-sm bg-[#221812] text-[#D4AF37] border border-[#D4AF37]/30">
             Resolução Célere
           </span>
         );
       case 'estrategica':
         return (
-          <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[#2A1C16] text-[#E5C378] border border-[#D4AF37]/30">
+          <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-sm bg-[#1A120E] text-[#C5BDB7] border border-white/15">
             Estratégico / Consultivo
           </span>
         );
@@ -135,21 +135,18 @@ export const PracticeAreasBento: React.FC<PracticeAreasBentoProps> = ({ onOpenCo
           {/* FEATURED CARD (2 columns span on large screens) - Direito Trabalhista */}
           <motion.div
             variants={cardVariants}
-            whileHover={{ y: -4, borderColor: '#D4AF37' }}
+            whileHover={{ y: -3, borderColor: 'rgba(212, 175, 55, 0.45)' }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="md:col-span-2 p-6 sm:p-8 tobacco-bg gold-border shadow-xl relative flex flex-col justify-between group transition-colors"
+            className="md:col-span-2 p-6 sm:p-8 bg-[#18100C] border border-[#D4AF37]/20 rounded-sm shadow-sm relative flex flex-col justify-between group transition-colors"
           >
             <div>
               {/* Top Accent Pill */}
               <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-                <div className="flex items-center gap-2.5">
-                  <div className="p-2.5 bg-[#120D0B] border border-[#D4AF37]/50 text-[#D4AF37]">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-[#120D0B] border border-[#D4AF37]/35 text-[#D4AF37] rounded-sm">
                     {getIcon(featuredArea.iconName)}
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#D4AF37] serif block">
-                      01. ALTO IMPACTO
-                    </span>
                     <h3 className="text-xl sm:text-2xl font-cinzel font-bold text-[#FFFFFF]">
                       {featuredArea.title}
                     </h3>
@@ -158,19 +155,19 @@ export const PracticeAreasBento: React.FC<PracticeAreasBentoProps> = ({ onOpenCo
                 {getUrgencyBadge(featuredArea.urgencyLevel)}
               </div>
 
-              <p className="text-sm sm:text-base text-[#DCD4CD] font-medium mb-3">
+              <p className="text-xs sm:text-sm text-[#D4AF37] font-medium mb-2">
                 {featuredArea.tagline}
               </p>
 
-              <p className="text-xs sm:text-sm text-[#F3EFEA]/70 leading-relaxed mb-6">
+              <p className="text-xs sm:text-sm text-[#C5BDB7] leading-relaxed mb-5">
                 {featuredArea.description}
               </p>
 
               {/* Key Action Points List */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-8 bg-[#140D0B] p-4 gold-border">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6 pt-3 border-t border-[#D4AF37]/15">
                 {featuredArea.detailedPoints.slice(0, 4).map((pt, idx) => (
                   <div key={idx} className="flex items-start gap-2 text-xs text-[#E6E0DA]">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0 mt-0.5" />
+                    <span className="text-[#D4AF37] font-bold mt-0.5">•</span>
                     <span>{pt}</span>
                   </div>
                 ))}
@@ -178,70 +175,63 @@ export const PracticeAreasBento: React.FC<PracticeAreasBentoProps> = ({ onOpenCo
             </div>
 
             {/* Actions for Featured Card */}
-            <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[#D4AF37]/20">
+            <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[#D4AF37]/15">
               <button
                 onClick={() => setSelectedArea(featuredArea)}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#E5C378] hover:text-[#FFFFFF] underline decoration-[#D4AF37]/50 underline-offset-4 cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs text-[#A69E96] hover:text-[#FFFFFF] transition-colors cursor-pointer"
               >
-                <Info className="w-3.5 h-3.5" />
-                <span>Ver checklist completo e orientações</span>
+                <Info className="w-3.5 h-3.5 text-[#D4AF37]" />
+                <span>Ver diretrizes completas</span>
               </button>
 
               <div className="flex items-center gap-2.5">
                 <motion.a
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   href={`https://wa.me/${OFFICE_CONTACT.whatsappClean}?text=${encodeURIComponent(featuredArea.whatsappPreset)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold uppercase tracking-[0.12em] text-[#120D0B] bg-[#D4AF37] hover:bg-[#E5C378] transition-colors gold-glow-btn cursor-pointer shadow-md"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#120D0B] bg-[#D4AF37] hover:bg-[#E5C378] transition-colors rounded-sm cursor-pointer shadow-sm"
                 >
                   <MessageCircle className="w-3.5 h-3.5 fill-current" />
-                  <span>Consultar sobre Trabalho</span>
+                  <span>Consultar Especialista</span>
                 </motion.a>
               </div>
             </div>
           </motion.div>
 
           {/* Regular Area Cards in Bento format */}
-          {regularAreas.map((area, index) => {
-            const codeNumbers = ['02. FAMÍLIA', '03. SAÚDE & CONSUMIDOR', '04. EMPRESARIAL', '05. IMOBILIÁRIO'];
-            const areaCode = codeNumbers[index] || `0${index + 2}. ESPECIALIDADE`;
+          {regularAreas.map((area) => {
             return (
               <motion.div
                 key={area.id}
                 variants={cardVariants}
-                whileHover={{ y: -4, borderColor: '#D4AF37' }}
+                whileHover={{ y: -3, borderColor: 'rgba(212, 175, 55, 0.45)' }}
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className="p-6 tobacco-bg gold-border shadow-lg flex flex-col justify-between group transition-colors"
+                className="p-6 bg-[#18100C] border border-[#D4AF37]/20 rounded-sm shadow-sm flex flex-col justify-between group transition-colors"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <div className="text-[10px] font-bold text-[#D4AF37] serif tracking-wider">
-                      {areaCode}
+                    <div className="p-1.5 bg-[#120D0B] border border-[#D4AF37]/25 text-[#D4AF37] rounded-sm">
+                      {getIcon(area.iconName)}
                     </div>
                     {getUrgencyBadge(area.urgencyLevel)}
                   </div>
 
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="p-1.5 bg-[#120D0B] border border-[#D4AF37]/30 text-[#D4AF37]">
-                      {getIcon(area.iconName)}
-                    </div>
-                    <h3 className="text-lg font-cinzel font-bold text-[#FFFFFF] group-hover:text-[#E5C378] transition-colors">
-                      {area.title}
-                    </h3>
-                  </div>
+                  <h3 className="text-base sm:text-lg font-cinzel font-bold text-[#FFFFFF] group-hover:text-[#E5C378] transition-colors mb-1">
+                    {area.title}
+                  </h3>
 
                   <p className="text-xs font-medium text-[#D4AF37] mb-2">
                     {area.tagline}
                   </p>
 
-                  <p className="text-xs text-[#F3EFEA]/70 leading-relaxed mb-4">
+                  <p className="text-xs text-[#A69E96] leading-relaxed mb-4">
                     {area.description}
                   </p>
 
                   {/* Sub items */}
-                  <div className="space-y-1.5 mb-6">
+                  <div className="space-y-1.5 mb-5 pt-3 border-t border-[#D4AF37]/10">
                     {area.detailedPoints.slice(0, 2).map((item, i) => (
                       <div key={i} className="flex items-start gap-1.5 text-[11px] text-[#C5BDB7]">
                         <span className="text-[#D4AF37] font-bold">•</span>
@@ -252,12 +242,12 @@ export const PracticeAreasBento: React.FC<PracticeAreasBentoProps> = ({ onOpenCo
                 </div>
 
                 {/* Card Footer Actions */}
-                <div className="pt-4 border-t border-[#D4AF37]/15 flex items-center justify-between gap-2">
+                <div className="pt-3.5 border-t border-[#D4AF37]/15 flex items-center justify-between gap-2">
                   <button
                     onClick={() => setSelectedArea(area)}
-                    className="text-[11px] font-semibold text-[#C5BDB7] hover:text-[#FFFFFF] underline decoration-[#D4AF37]/40 cursor-pointer"
+                    className="text-[11px] text-[#A69E96] hover:text-[#FFFFFF] transition-colors cursor-pointer"
                   >
-                    Detalhes
+                    Mais detalhes
                   </button>
 
                   <motion.a
@@ -267,8 +257,8 @@ export const PracticeAreasBento: React.FC<PracticeAreasBentoProps> = ({ onOpenCo
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#D4AF37] hover:text-[#E5C378] transition-colors cursor-pointer"
                   >
-                    <span>Avaliar Caso</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>Avaliar</span>
+                    <ArrowRight className="w-3 h-3" />
                   </motion.a>
                 </div>
               </motion.div>

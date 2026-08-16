@@ -14,8 +14,13 @@ import {
   Scale, 
   Building2,
   FileText,
-  Loader2
+  Loader2,
+  ShieldCheck,
+  Lock,
+  FileCheck2
 } from 'lucide-react';
+import { createExecutiveDossier, GeneratedDossier } from '../lib/dossier';
+import { DossierPreviewModal } from './DossierPreviewModal';
 
 export const TriageCalculator: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -26,6 +31,8 @@ export const TriageCalculator: React.FC = () => {
   const [preferredContact, setPreferredContact] = useState<'whatsapp' | 'call' | 'presencial'>('whatsapp');
   const [isCalculating, setIsCalculating] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [generatedDossier, setGeneratedDossier] = useState<GeneratedDossier | null>(null);
+  const [showDossierModal, setShowDossierModal] = useState<boolean>(false);
 
   const areasList = [
     {
@@ -98,23 +105,21 @@ export const TriageCalculator: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const areaName = currentAreaObj.label;
-    const urgencyLabel = urgency === 'imediata' ? 'Urgência Máxima (24h)' : urgency === 'dias' ? 'Nos próximos dias' : 'Consulta Preventiva';
-    
-    const formattedMsg = `*Diagnóstico Preliminar - Drigo e Carneiro Advocacia*\n\n` +
-      `*Nome:* ${clientName || 'Cliente'}\n` +
-      `*Área:* ${areaName}\n` +
-      `*Prioridade:* ${urgencyLabel}\n` +
-      `*Situação Informada:* ${caseDescription || 'Não especificada em texto'}\n` +
-      `*Preferência de Atendimento:* ${preferredContact.toUpperCase()}\n\n` +
-      `Gostaria de agendar a análise com o advogado especialista.`;
+    const dossier = createExecutiveDossier({
+      clientName: clientName || 'Cliente Interessado',
+      area: currentAreaObj.label,
+      urgency,
+      situationSummary: caseDescription || 'Solicitou análise personalizada com advogado especialista.',
+      preferredChannel: preferredContact === 'whatsapp' ? 'WhatsApp Direto' : preferredContact === 'call' ? 'Videoconferência (Meet)' : 'Presencial (Av. Paulista)',
+      source: 'triagem',
+    });
 
-    const whatsappUrl = `https://wa.me/${OFFICE_CONTACT.whatsappClean}?text=${encodeURIComponent(formattedMsg)}`;
-    
+    setGeneratedDossier(dossier);
+
     setTimeout(() => {
       setIsSubmitting(false);
-      window.open(whatsappUrl, '_blank');
-    }, 350);
+      window.open(dossier.whatsappUrl, '_blank');
+    }, 450);
   };
 
   const stepSlideVariants = {
@@ -344,22 +349,37 @@ export const TriageCalculator: React.FC = () => {
                   exit="exit"
                   onSubmit={handleFinishTriage}
                 >
-                  <div className="bg-[#150E0C] border border-[#D4AF37]/30 rounded-sm p-4 sm:p-5 mb-6">
-                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D4AF37] mb-2">
-                      <FileText className="w-4 h-4" />
-                      <span>Resumo do seu Enquadramento Jurídico</span>
+                  <div className="bg-[#150E0C] border border-[#D4AF37]/35 rounded-sm p-4 sm:p-5 mb-6 relative overflow-hidden shadow-lg">
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D4AF37]">
+                        <FileCheck2 className="w-4 h-4 text-[#D4AF37]" />
+                        <span>Dossiê Pré-Análise DC #2026</span>
+                      </div>
+                      <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-sm border border-emerald-500/30 flex items-center gap-1">
+                        <ShieldCheck className="w-3 h-3" />
+                        Protocolo Prioritário
+                      </span>
                     </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#C5BDB7]">
-                      <div>Área: <strong className="text-[#FFFFFF]">{currentAreaObj.label}</strong></div>
-                      <div>Urgência: <strong className="text-[#FFFFFF]">{urgency === 'imediata' ? 'Urgente / Liminar' : urgency === 'dias' ? 'Alta prioridade' : 'Preventiva'}</strong></div>
-                      <div className="sm:col-span-2 mt-1">Cenário: <strong className="text-[#E5C378]">{caseDescription || 'Análise personalizada com advogado'}</strong></div>
+                      <div>Área Técnica: <strong className="text-[#FFFFFF]">{currentAreaObj.label}</strong></div>
+                      <div>Classificação: <strong className="text-[#FFFFFF]">{urgency === 'imediata' ? 'Urgência Máxima (24h)' : urgency === 'dias' ? 'Alta Prioridade' : 'Preventiva'}</strong></div>
+                      <div className="sm:col-span-2 mt-1">Cenário Informado: <strong className="text-[#E5C378]">{caseDescription || 'Análise personalizada com advogado'}</strong></div>
+                    </div>
+
+                    <div className="mt-3 pt-2.5 border-t border-[#D4AF37]/15 flex items-center justify-between text-[11px] text-[#A69E96]">
+                      <span className="flex items-center gap-1">
+                        <Lock className="w-3 h-3 text-[#D4AF37]" />
+                        Sigilo Profissional OAB / LGPD
+                      </span>
+                      <span className="font-mono text-[#D4AF37]">Roteamento Direto aos Sócios</span>
                     </div>
                   </div>
 
                   <div className="space-y-4 mb-6">
                     <div>
                       <label className="block text-xs font-semibold text-[#E6E0DA] mb-1.5">
-                        Seu Nome Completo para Identificação:
+                        Seu Nome Completo para Emissão do Dossiê *:
                       </label>
                       <input
                         type="text"
@@ -409,25 +429,27 @@ export const TriageCalculator: React.FC = () => {
                       <span>Voltar</span>
                     </button>
 
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="inline-flex items-center gap-2 px-6 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#120D0B] bg-gold-gradient rounded-sm gold-glow-btn cursor-pointer shadow-md disabled:opacity-75"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Conectando...</span>
-                        </>
-                      ) : (
-                        <>
-                          <MessageCircle className="w-4 h-4 fill-current" />
-                          <span>Enviar Diagnóstico e Iniciar Conversa</span>
-                        </>
-                      )}
-                    </motion.button>
+                    <div className="flex items-center gap-2">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="inline-flex items-center gap-2 px-6 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#120D0B] bg-gold-gradient rounded-sm gold-glow-btn cursor-pointer shadow-md disabled:opacity-75"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span>Gerando Dossiê Executivo...</span>
+                          </>
+                        ) : (
+                          <>
+                            <MessageCircle className="w-4 h-4 fill-current" />
+                            <span>Conectar no WhatsApp com Dossiê</span>
+                          </>
+                        )}
+                      </motion.button>
+                    </div>
                   </div>
                 </motion.form>
               )}
@@ -435,6 +457,13 @@ export const TriageCalculator: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Dossier Preview Modal */}
+      <DossierPreviewModal
+        dossier={generatedDossier}
+        isOpen={showDossierModal}
+        onClose={() => setShowDossierModal(false)}
+      />
     </section>
   );
 };

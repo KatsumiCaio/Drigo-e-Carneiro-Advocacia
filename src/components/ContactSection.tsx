@@ -10,8 +10,12 @@ import {
   ShieldCheck, 
   CheckCircle2,
   Calendar,
-  Building
+  Building,
+  FileCheck2,
+  Lock,
+  Sparkles
 } from 'lucide-react';
+import { createExecutiveDossier, GeneratedDossier } from '../lib/dossier';
 
 export const ContactSection: React.FC = () => {
   const [name, setName] = useState('');
@@ -21,26 +25,28 @@ export const ContactSection: React.FC = () => {
   const [message, setMessage] = useState('');
   const [channel, setChannel] = useState('WhatsApp');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [lastDossier, setLastDossier] = useState<GeneratedDossier | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
 
-    const formattedMessage = `*Novo Contato pelo Site - Drigo & Carneiro*\n\n` +
-      `*Nome:* ${name}\n` +
-      `*Telefone/WhatsApp:* ${phone}\n` +
-      `*E-mail:* ${email || 'Não informado'}\n` +
-      `*Área de Interesse:* ${area}\n` +
-      `*Canal de Preferência:* ${channel}\n` +
-      `*Resumo do Caso:* ${message || 'Solicitou contato direto'}\n\n` +
-      `Solicito retorno para agendamento de consulta.`;
+    const dossier = createExecutiveDossier({
+      clientName: name,
+      phone,
+      email,
+      area,
+      preferredChannel: channel,
+      situationSummary: message || 'Solicitou atendimento com a coordenação de sócios.',
+      source: 'formulario_contato',
+    });
 
-    const whatsappUrl = `https://wa.me/${OFFICE_CONTACT.whatsappClean}?text=${encodeURIComponent(formattedMessage)}`;
-    
+    setLastDossier(dossier);
+
     // Open whatsapp after brief feedback
     setTimeout(() => {
-      window.open(whatsappUrl, '_blank');
-    }, 800);
+      window.open(dossier.whatsappUrl, '_blank');
+    }, 850);
   };
 
   return (
@@ -195,19 +201,22 @@ export const ContactSection: React.FC = () => {
               </div>
 
               {isSubmitted ? (
-                <div className="py-12 text-center animate-in fade-in duration-300">
+                <div className="py-10 text-center animate-in fade-in duration-300">
                   <div className="w-14 h-14 rounded-full bg-emerald-950/80 border border-emerald-500/50 flex items-center justify-center text-emerald-400 mx-auto mb-4">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
+                  <span className="text-[11px] uppercase font-bold tracking-widest text-[#D4AF37] block mb-1">
+                    {lastDossier?.protocol ? `Protocolo Exclusivo: ${lastDossier.protocol}` : 'Dossiê Pré-Análise DC #2026'}
+                  </span>
                   <h4 className="text-lg font-cinzel font-bold text-[#FFFFFF] mb-2">
-                    Solicitação Recebida com Sucesso!
+                    Dossiê Gerado e Encaminhado!
                   </h4>
                   <p className="text-xs text-[#C5BDB7] max-w-md mx-auto mb-6 leading-relaxed">
-                    Estamos redirecionando para o WhatsApp do nosso plantão para que você receba atendimento imediato.
+                    Você está sendo redirecionado para o WhatsApp com seu protocolo prioritário sob sigilo profissional.
                   </p>
                   <button
                     onClick={() => setIsSubmitted(false)}
-                    className="text-xs text-[#D4AF37] hover:underline"
+                    className="text-xs text-[#D4AF37] hover:underline cursor-pointer"
                   >
                     Enviar nova mensagem
                   </button>

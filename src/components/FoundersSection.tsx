@@ -53,26 +53,26 @@ export const FoundersSection: React.FC = () => {
                       {partner.role}
                     </p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-sm bg-[#150E0C] border border-[#D4AF37]/40 text-[11px] font-bold text-[#D4AF37] tracking-wider">
+                  <span className="px-2.5 py-1 rounded-sm bg-[#150E0C] border border-[#D4AF37]/30 text-[11px] font-bold text-[#D4AF37] tracking-wider">
                     {partner.oab}
                   </span>
                 </div>
 
                 {/* Bio text */}
-                <p className="text-xs sm:text-sm text-[#C5BDB7] leading-relaxed mb-6">
+                <p className="text-xs sm:text-sm text-[#C5BDB7] leading-relaxed mb-5">
                   {partner.bio}
                 </p>
 
                 {/* Academic credentials */}
-                <div className="mb-6 bg-[#170E0B] p-4 rounded-sm border border-[#D4AF37]/15">
-                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D4AF37] mb-2.5">
-                    <GraduationCap className="w-4 h-4" />
+                <div className="mb-5 py-3 border-y border-[#D4AF37]/10">
+                  <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#D4AF37] mb-2">
+                    <GraduationCap className="w-3.5 h-3.5" />
                     <span>Qualificação e Especializações</span>
                   </div>
-                  <ul className="space-y-1.5">
+                  <ul className="space-y-1">
                     {partner.academicBackground.map((item, i) => (
-                      <li key={i} className="text-xs text-[#DCD4CD] flex items-start gap-2">
-                        <span className="text-[#D4AF37] font-bold mt-0.5">›</span>
+                      <li key={i} className="text-xs text-[#A69E96] flex items-start gap-2">
+                        <span className="text-[#D4AF37] font-bold mt-0.5">•</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -80,8 +80,7 @@ export const FoundersSection: React.FC = () => {
                 </div>
 
                 {/* Quote */}
-                <div className="mb-6 relative pl-6 border-l-2 border-[#D4AF37]/60 italic text-xs text-[#A69E96]">
-                  <Quote className="w-4 h-4 text-[#D4AF37]/30 absolute -left-2 -top-1" />
+                <div className="mb-5 pl-4 border-l border-[#D4AF37]/40 italic text-xs text-[#8C827A]">
                   "{partner.quote}"
                 </div>
               </div>

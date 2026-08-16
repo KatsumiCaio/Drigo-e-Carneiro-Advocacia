@@ -94,6 +94,18 @@ Este documento centraliza as **Issues estruturadas** para o roadmap e manutenç�
   - [ ] Renderização em Markdown segura via `react-markdown`.
   - [ ] Metadados de SEO (OpenGraph / Schema.org) para indexação no Google.
 
+### Issue #304: `[NOVA FUNÇÃO]` Gerador de "Dossiê / Parecer Preliminar" no WhatsApp (Qualificação de Alto Ticket)
+- **Status:** Concluída (v1.1)
+- **Prioridade:** Alta
+- **Descrição:** Ao concluir qualquer formulário de contato, triagem jurídica ou agendamento de consulta, o sistema gera automaticamente um protocolo executivo exclusivo no formato `DC-2026-AREA-XXXX` e compila um dossiê técnico estruturado para os sócios, ativando gatilhos de exclusividade, autoridade e sigilo profissional (OAB/LGPD).
+- **Arquivos-chave:** `src/lib/dossier.ts`, `src/components/DossierPreviewModal.tsx`, `src/components/TriageCalculator.tsx`, `src/components/ConsultationModal.tsx`, `src/components/ContactSection.tsx`, `src/__tests__/dossier.test.ts`
+- **Critérios de Aceite:**
+  - [x] Geração determinística de códigos prioritários `DC-2026-AREA-XXXX`.
+  - [x] Formatação executiva de alto padrão para recepção direta pelos sócios no WhatsApp.
+  - [x] Modal de visualização do dossiê com cópia de protocolo e abertura direta.
+  - [x] Rastreamento de telemetria para dossiês emitidos e protocolos copiados.
+  - [x] 100% de cobertura de testes unitários no Vitest.
+
 ---
 
 ## 🔄 Fluxo de Trabalho e Regras de Pull Request

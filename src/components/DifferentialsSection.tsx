@@ -47,29 +47,25 @@ export const DifferentialsSection: React.FC = () => {
           {FIRM_DIFFERENTIALS.map((diff, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.4, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ y: -4, borderColor: '#D4AF37' }}
-              className="p-6 sm:p-7 rounded-sm bg-[#FFFFFF] border border-[#E5DEC9] shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+              transition={{ duration: 0.35, delay: idx * 0.06, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -3, borderColor: '#D4AF37' }}
+              className="p-6 sm:p-7 rounded-sm bg-[#FFFFFF] border border-[#E8E1D5] shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
             >
               <div>
-                <div className="w-12 h-12 rounded-sm bg-[#1F1410] flex items-center justify-center mb-5 border border-[#D4AF37]/40 shadow-inner">
+                <div className="w-10 h-10 rounded-sm bg-[#FAF7F2] border border-[#E5DEC9] flex items-center justify-center mb-4">
                   {getIcon(diff.iconName)}
                 </div>
 
-                <h3 className="text-base font-cinzel font-bold text-[#1F1410] mb-3">
+                <h3 className="text-base font-cinzel font-bold text-[#1F1410] mb-2">
                   {diff.title}
                 </h3>
 
-                <p className="text-xs sm:text-sm text-[#5C534D] leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#665D55] leading-relaxed">
                   {diff.description}
                 </p>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-[#EFE9DF] flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#A67C52]">
-                <span>Pilar 0{idx + 1} de Excelência</span>
               </div>
             </motion.div>
           ))}
