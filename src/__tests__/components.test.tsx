@@ -3,6 +3,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { LegalTermsModal } from '../components/LegalTermsModal';
 import { LogoMonogram } from '../components/LogoMonogram';
+import { FloatingWhatsApp } from '../components/FloatingWhatsApp';
+import { telemetry } from '../lib/observability';
 
 describe('UI Components Integration', () => {
   it('renders LogoMonogram with 45-degree diamond badge and title', () => {
@@ -28,5 +30,31 @@ describe('UI Components Integration', () => {
     const closeBtn = screen.getByRole('button', { name: /Compreendido e Fechar/i });
     fireEvent.click(closeBtn);
     expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('tracks telemetry events when clicking floating WhatsApp trigger and quick message links', () => {
+    const trackSpy = vi.spyOn(telemetry, 'trackEvent');
+
+    render(<FloatingWhatsApp />);
+
+    // Click trigger to open popover
+    const trigger = screen.getByLabelText(/Atendimento via WhatsApp/i);
+    fireEvent.click(trigger);
+
+    expect(trackSpy).toHaveBeenCalledWith('whatsapp_trigger_clicked', expect.objectContaining({
+      targetId: 'floating-whatsapp-trigger',
+      action: 'opened_popover',
+    }));
+
+    // Check that popover appears with quick message links
+    const laborOption = screen.getByText(/Direito do Trabalho/i);
+    expect(laborOption).toBeInTheDocument();
+
+    // Click quick-message link
+    fireEvent.click(laborOption);
+
+    expect(trackSpy).toHaveBeenCalledWith('whatsapp_quick_message_clicked', expect.objectContaining({
+      label: expect.stringContaining('Direito do Trabalho'),
+    }));
   });
 });

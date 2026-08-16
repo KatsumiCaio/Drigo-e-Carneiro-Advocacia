@@ -28,8 +28,15 @@ export interface PerformanceMetric {
   timestamp: number;
 }
 
+export interface TrackedEvent {
+  eventName: string;
+  properties?: Record<string, unknown>;
+  timestamp: number;
+}
+
 class TelemetryService {
   private breadcrumbs: Breadcrumb[] = [];
+  private events: TrackedEvent[] = [];
   private readonly maxBreadcrumbs = 50;
   private isInitialized = false;
 
@@ -109,6 +116,35 @@ class TelemetryService {
 
   public captureMetric(metric: PerformanceMetric) {
     this.addBreadcrumb('network', `Metric ${metric.name}: ${metric.value.toFixed(2)}ms (${metric.rating})`);
+  }
+
+  public trackEvent(eventName: string, properties?: Record<string, unknown>): TrackedEvent {
+    const event: TrackedEvent = {
+      eventName,
+      properties,
+      timestamp: Date.now(),
+    };
+
+    this.events.push(event);
+    if (this.events.length > this.maxBreadcrumbs) {
+      this.events.shift();
+    }
+
+    this.addBreadcrumb('user-action', `Track Event: ${eventName}`, properties);
+
+    if (typeof window !== 'undefined' && typeof (window as unknown as { gtag?: (type: string, name: string, data?: unknown) => void }).gtag === 'function') {
+      (window as unknown as { gtag: (type: string, name: string, data?: unknown) => void }).gtag('event', eventName, properties);
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      console.info(`[Telemetry Event: ${eventName}]`, properties);
+    }
+
+    return event;
+  }
+
+  public getEvents(): ReadonlyArray<TrackedEvent> {
+    return this.events;
   }
 
   public getBreadcrumbs(): ReadonlyArray<Breadcrumb> {

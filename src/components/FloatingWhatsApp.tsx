@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { OFFICE_CONTACT } from '../data/legalData';
 import { MessageCircle, X, Check, Shield } from 'lucide-react';
 import { LogoMonogram } from './LogoMonogram';
+import { telemetry } from '../lib/observability';
 
 export const FloatingWhatsApp: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +15,7 @@ export const FloatingWhatsApp: React.FC = () => {
       if (!hasPrompted) {
         setIsOpen(true);
         setHasPrompted(true);
+        telemetry.trackEvent('whatsapp_popover_auto_opened', { trigger: 'timer', delayMs: 4000 });
       }
     }, 4000);
 
@@ -26,6 +28,31 @@ export const FloatingWhatsApp: React.FC = () => {
     { label: '🏥 Negativa Plano de Saúde', msg: 'Olá! O plano de saúde negou um procedimento médico urgente.' },
     { label: '💼 Outro Assunto', msg: 'Olá! Gostaria de conversar com um advogado do escritório.' },
   ];
+
+  const handleTriggerClick = () => {
+    const nextState = !isOpen;
+    setIsOpen(nextState);
+    telemetry.trackEvent('whatsapp_trigger_clicked', {
+      targetId: 'floating-whatsapp-trigger',
+      action: nextState ? 'opened_popover' : 'closed_popover',
+      hasPrompted,
+    });
+  };
+
+  const handleClosePopover = () => {
+    setIsOpen(false);
+    telemetry.trackEvent('whatsapp_popover_dismissed', {
+      targetId: 'floating-whatsapp-close-btn',
+    });
+  };
+
+  const handleQuickMessageClick = (item: typeof quickMessages[0]) => {
+    telemetry.trackEvent('whatsapp_quick_message_clicked', {
+      label: item.label,
+      message: item.msg,
+      destination: OFFICE_CONTACT.whatsappClean,
+    });
+  };
 
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end">
@@ -55,7 +82,8 @@ export const FloatingWhatsApp: React.FC = () => {
               </div>
 
               <button
-                onClick={() => setIsOpen(false)}
+                id="floating-whatsapp-close-btn"
+                onClick={handleClosePopover}
                 className="text-[#A69E96] hover:text-[#FFFFFF] p-1 cursor-pointer transition-colors"
                 aria-label="Fechar popover"
               >
@@ -74,8 +102,10 @@ export const FloatingWhatsApp: React.FC = () => {
                 {quickMessages.map((item, idx) => (
                   <motion.a
                     key={idx}
+                    id={`floating-whatsapp-quickmsg-${idx}`}
                     whileHover={{ x: 2 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={() => handleQuickMessageClick(item)}
                     href={`https://wa.me/${OFFICE_CONTACT.whatsappClean}?text=${encodeURIComponent(item.msg)}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -115,7 +145,7 @@ export const FloatingWhatsApp: React.FC = () => {
         <motion.button
           whileHover={{ scale: 1.06 }}
           whileTap={{ scale: 0.94 }}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={handleTriggerClick}
           id="floating-whatsapp-trigger"
           className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white flex items-center justify-center shadow-2xl ring-4 ring-[#25D366]/20 relative cursor-pointer"
           aria-label="Atendimento via WhatsApp"

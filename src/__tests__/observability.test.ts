@@ -19,4 +19,21 @@ describe('Observability & Telemetry Module', () => {
     expect(report.timestamp).toBeDefined();
     expect(report.context).toHaveProperty('component', 'TriageCalculator');
   });
+
+  it('tracks user engagement events with custom properties', () => {
+    const event = telemetry.trackEvent('whatsapp_trigger_clicked', {
+      targetId: 'floating-whatsapp-trigger',
+      action: 'opened_popover',
+    });
+
+    expect(event.eventName).toBe('whatsapp_trigger_clicked');
+    expect(event.properties).toEqual({
+      targetId: 'floating-whatsapp-trigger',
+      action: 'opened_popover',
+    });
+    expect(event.timestamp).toBeDefined();
+
+    const allEvents = telemetry.getEvents();
+    expect(allEvents.some((e) => e.eventName === 'whatsapp_trigger_clicked')).toBe(true);
+  });
 });
