@@ -1,0 +1,15 @@
+{
+  "name": "Drigo & Carneiro Advocacia",
+  "short_name": "Drigo & Carneiro",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "64x64 32x32 24x24 16x16 192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "theme_color": "#120D0B",
+  "background_color": "#120D0B",
+  "display": "standalone"
+}

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3E5AB" />
+      <stop offset="50%" stop-color="#D4AF37" />
+      <stop offset="100%" stop-color="#AA771C" />
+    </linearGradient>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1F1410" />
+      <stop offset="100%" stop-color="#120D0B" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background container -->
+  <rect width="64" height="64" rx="14" fill="url(#bgGradient)" />
+
+  <!-- Outer subtle border -->
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="url(#goldGradient)" stroke-width="1" stroke-opacity="0.35" />
+
+  <!-- Center 45-degree rotated diamond -->
+  <g transform="translate(32, 32)">
+    <rect x="-18" y="-18" width="36" height="36" rx="2" transform="rotate(45)" fill="#19100C" stroke="url(#goldGradient)" stroke-width="2" />
+    
+    <!-- Monogram Letters "DC" -->
+    <text 
+      x="0" 
+      y="5" 
+      text-anchor="middle" 
+      font-family="'Cinzel', 'Playfair Display', 'Times New Roman', serif" 
+      font-size="18" 
+      font-weight="700" 
+      letter-spacing="-0.5" 
+      fill="url(#goldGradient)"
+    >DC</text>
+  </g>
+</svg>
